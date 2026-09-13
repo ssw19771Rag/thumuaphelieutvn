@@ -1,0 +1,698 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Hệ Thống Quản Trị Doanh Nghiệp TVN - thumuaphelieutvn.com</title>
+
+  <!-- Favicon -->
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><circle cx='50' cy='50' r='48' fill='%2316a34a'/><text x='50' y='66' font-size='46' text-anchor='middle' fill='white' font-family='sans-serif' font-weight='bold'>♻</text></svg>">
+
+  <!-- Google Fonts: Plus Jakarta Sans & Inter -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+
+  <!-- Admin CSS -->
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+
+  <!-- =========================================================================
+       1. SIDEBAR
+       ========================================================================= -->
+  <aside class="admin-sidebar" id="adminSidebar">
+    <div class="sidebar-brand">
+      <div class="brand-icon">
+        <i class="fa-solid fa-recycle"></i>
+      </div>
+      <div class="brand-text">
+        <h2>TVN ADMIN</h2>
+        <p>Trung Vạn Niên</p>
+      </div>
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Hệ Thống Quản Trị</div>
+      <a class="nav-link active" data-tab="overview">
+        <i class="fa-solid fa-chart-pie"></i>
+        <span>Tổng Quan KPI</span>
+      </a>
+      <a class="nav-link" data-tab="prices">
+        <i class="fa-solid fa-tags"></i>
+        <span>Bảng Giá Phế Liệu</span>
+      </a>
+      <a class="nav-link" data-tab="leads">
+        <i class="fa-solid fa-clipboard-list"></i>
+        <span>Đơn Khảo Sát & CRM</span>
+        <span class="nav-badge" id="leadsBadgeNav" style="display: none;">0</span>
+      </a>
+      <a class="nav-link" data-tab="commission">
+        <i class="fa-solid fa-hand-holding-dollar"></i>
+        <span>Chính Sách Hoa Hồng</span>
+        <span class="nav-badge gold">HOT</span>
+      </a>
+
+      <div class="nav-section-label" style="margin-top: 14px;">Hệ Thống Website</div>
+      <a class="nav-link" data-tab="settings">
+        <i class="fa-solid fa-sliders"></i>
+        <span>Cấu Hình Website</span>
+      </a>
+      <a href="index.html" target="_blank" class="nav-link">
+        <i class="fa-solid fa-arrow-up-right-from-square"></i>
+        <span>Mở Trang Chủ Khách</span>
+      </a>
+      <a href="review.html" target="_blank" class="nav-link">
+        <i class="fa-solid fa-square-check"></i>
+        <span>Hồ Sơ Nghiệm Thu</span>
+      </a>
+    </nav>
+
+    <div class="sidebar-footer">
+      <div class="user-snippet">
+        <div class="user-avatar">
+          <i class="fa-solid fa-user-shield"></i>
+        </div>
+        <div class="user-info">
+          <div class="user-name">Ban Lãnh Đạo TVN</div>
+          <div class="user-role">Quản Trị Viên Cấp Cao</div>
+        </div>
+        <button type="button" class="btn-logout" id="btnLogout" title="Đăng xuất khỏi hệ thống">
+          <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- =========================================================================
+       2. MAIN CONTENT AREA
+       ========================================================================= -->
+  <div class="admin-main">
+    
+    <!-- Top Header Bar -->
+    <header class="admin-header">
+      <div class="header-left">
+        <button type="button" class="menu-toggle" id="menuToggle">
+          <i class="fa-solid fa-bars"></i>
+        </button>
+        <div class="page-title">
+          <h1 id="headerPageTitle">Bảng Điều Khiển Tổng Quan</h1>
+          <p id="headerPageSub">Số liệu KPI, tiến độ khảo sát và phân tích thu mua TVN</p>
+        </div>
+      </div>
+
+      <div class="header-right">
+        <a href="http://thumuaphelieutvn.com" target="_blank" class="header-live-domain" title="Mở website chính thức qua tên miền">
+          <span class="live-pulse"></span>
+          <span>thumuaphelieutvn.com</span>
+          <i class="fa-solid fa-arrow-up-right-from-square" style="font-size: 0.75rem;"></i>
+        </a>
+
+        <button type="button" class="header-btn" title="Thông báo đơn mới" onclick="document.querySelector('.nav-link[data-tab=\'leads\']').click()">
+          <i class="fa-regular fa-bell"></i>
+          <span class="badge-dot" id="leadsBadgeHeader" style="display: none;"></span>
+        </button>
+
+        <button type="button" class="header-btn" title="Tải lại dữ liệu hệ thống" onclick="window.location.reload()">
+          <i class="fa-solid fa-rotate"></i>
+        </button>
+      </div>
+    </header>
+
+    <!-- Main Views Container -->
+    <main class="admin-content">
+
+      <!-- =====================================================================
+           VIEW 1: TỔNG QUAN (OVERVIEW)
+           ===================================================================== -->
+      <section class="view-section active" id="view-overview">
+        <!-- 4 KPI Cards -->
+        <div class="metrics-grid">
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">TỔNG ĐƠN KHẢO SÁT</span>
+              <div class="metric-icon-box icon-green">
+                <i class="fa-solid fa-truck-ramp-box"></i>
+              </div>
+            </div>
+            <div class="metric-value" id="kpiTotalLeads">5</div>
+            <div class="metric-footer">
+              <span class="trend-badge up"><i class="fa-solid fa-arrow-up"></i> +18%</span>
+              <span style="color: var(--text-muted);">so với tháng trước</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">ĐƠN CHỜ LIÊN HỆ GẤP</span>
+              <div class="metric-icon-box icon-gold">
+                <i class="fa-solid fa-phone-volume"></i>
+              </div>
+            </div>
+            <div class="metric-value" id="kpiPendingLeads">2</div>
+            <div class="metric-footer">
+              <span class="trend-badge neutral"><i class="fa-solid fa-clock"></i> Cần gọi ngay</span>
+              <span style="color: var(--text-muted);">sau 15-30 phút</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">MẶT HÀNG NIÊM YẾT</span>
+              <div class="metric-icon-box icon-blue">
+                <i class="fa-solid fa-boxes-stacked"></i>
+              </div>
+            </div>
+            <div class="metric-value" id="kpiActiveQuotes">19</div>
+            <div class="metric-footer">
+              <span class="trend-badge up"><i class="fa-solid fa-check"></i> Đang hiển thị</span>
+              <span style="color: var(--text-muted);">trên trang chủ</span>
+            </div>
+          </div>
+
+          <div class="metric-card">
+            <div class="metric-header">
+              <span class="metric-label">ĐƠN ĐÃ CÂN & THANH TOÁN</span>
+              <div class="metric-icon-box icon-purple">
+                <i class="fa-solid fa-circle-check"></i>
+              </div>
+            </div>
+            <div class="metric-value" id="kpiCompletedLeads">2</div>
+            <div class="metric-footer">
+              <span class="trend-badge up"><i class="fa-solid fa-award"></i> Hoàn tất 100%</span>
+              <span style="color: var(--text-muted);">đã nhận tiền</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Charts & Analysis Row -->
+        <div class="dashboard-split-grid">
+          <!-- Left: Weekly Volume Bar Chart -->
+          <div class="dashboard-card">
+            <div class="card-title-bar">
+              <h3><i class="fa-solid fa-chart-column"></i> Sản Lượng Thu Mua Dự Kiến Trong Tuần (Tấn)</h3>
+              <span style="font-size: 0.8rem; color: var(--text-muted);"><i class="fa-solid fa-location-dot"></i> Địa bàn Ninh Bình</span>
+            </div>
+            <div class="chart-container">
+              <div class="bar-chart-bars">
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 65px;"><span class="bar-val-tip">3.2T</span></div>
+                  <span class="bar-label">Thứ 2</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 110px;"><span class="bar-val-tip">5.8T</span></div>
+                  <span class="bar-label">Thứ 3</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 85px;"><span class="bar-val-tip">4.1T</span></div>
+                  <span class="bar-label">Thứ 4</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 140px; background: linear-gradient(180deg, #38bdf8 0%, rgba(56, 189, 248, 0.3) 100%);"><span class="bar-val-tip">8.4T</span></div>
+                  <span class="bar-label">Thứ 5</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 165px; background: linear-gradient(180deg, #fbbf24 0%, rgba(245, 158, 11, 0.3) 100%);"><span class="bar-val-tip">12.5T</span></div>
+                  <span class="bar-label">Hôm nay</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 95px;"><span class="bar-val-tip">5.0T</span></div>
+                  <span class="bar-label">Thứ 7</span>
+                </div>
+                <div class="bar-col">
+                  <div class="bar-fill" style="height: 70px;"><span class="bar-val-tip">3.5T</span></div>
+                  <span class="bar-label">CN</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Scrap Distribution Donut Chart -->
+          <div class="dashboard-card">
+            <div class="card-title-bar">
+              <h3><i class="fa-solid fa-pie-chart"></i> Cơ Cấu Doanh Thu Phế Liệu</h3>
+              <span style="font-size: 0.8rem; color: var(--primary-light);">Tháng này</span>
+            </div>
+            <div class="chart-container">
+              <div class="donut-wrapper">
+                <svg width="150" height="150" viewBox="0 0 42 42">
+                  <circle class="donut-hole" cx="21" cy="21" r="15.91549430918954" fill="#111c2e"></circle>
+                  <circle class="donut-ring" cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#1f2d42" stroke-width="5"></circle>
+                  <!-- Đồng 38% -->
+                  <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#f59e0b" stroke-width="5.5" stroke-dasharray="38 62" stroke-dashoffset="25"></circle>
+                  <!-- Nhôm 26% -->
+                  <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#0284c7" stroke-width="5.5" stroke-dasharray="26 74" stroke-dashoffset="87"></circle>
+                  <!-- Sắt 22% -->
+                  <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#10b981" stroke-width="5.5" stroke-dasharray="22 78" stroke-dashoffset="61"></circle>
+                  <!-- Inox & khác 14% -->
+                  <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#8b5cf6" stroke-width="5.5" stroke-dasharray="14 86" stroke-dashoffset="39"></circle>
+                  <text x="50%" y="48%" dominant-baseline="middle" text-anchor="middle" font-size="6" font-weight="bold" fill="#fff">TVN</text>
+                  <text x="50%" y="62%" dominant-baseline="middle" text-anchor="middle" font-size="3.2" fill="#94a3b8">Recycle</text>
+                </svg>
+
+                <div class="donut-legend">
+                  <div class="legend-item"><span class="legend-color" style="background: #f59e0b;"></span> <span>Đồng cáp: <strong>38%</strong></span></div>
+                  <div class="legend-item"><span class="legend-color" style="background: #0284c7;"></span> <span>Nhôm xingfa: <strong>26%</strong></span></div>
+                  <div class="legend-item"><span class="legend-color" style="background: #10b981;"></span> <span>Sắt công trình: <strong>22%</strong></span></div>
+                  <div class="legend-item"><span class="legend-color" style="background: #8b5cf6;"></span> <span>Inox & Khác: <strong>14%</strong></span></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent Leads Overview Card -->
+        <div class="dashboard-card">
+          <div class="card-title-bar">
+            <h3><i class="fa-solid fa-clock-rotate-left"></i> Yêu Cầu Khảo Sát Tận Nơi Mới Nhất</h3>
+            <button type="button" class="btn-admin btn-outline" onclick="document.querySelector('.nav-link[data-tab=\'leads\']').click()" style="padding: 5px 12px; font-size: 0.8rem;">
+              Xem tất cả đơn <i class="fa-solid fa-arrow-right"></i>
+            </button>
+          </div>
+          <div class="table-card" style="box-shadow: none; border: none;">
+            <table class="admin-table">
+              <thead>
+                <tr>
+                  <th>Khách Hàng / Doanh Nghiệp</th>
+                  <th>Số Điện Thoại</th>
+                  <th>Địa Điểm Khảo Sát</th>
+                  <th>Mặt Hàng & Khối Lượng</th>
+                  <th>Trạng Thái</th>
+                </tr>
+              </thead>
+              <tbody id="overviewRecentLeadsBody">
+                <!-- Dynamically populated -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 2: QUẢN LÝ BẢNG GIÁ PHẾ LIỆU (PRICES)
+           ===================================================================== -->
+      <section class="view-section" id="view-prices">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-tabs">
+            <button type="button" class="filter-tab-btn price-cat-tab active" data-cat="all" id="btnFilterCatAll">Tất cả (19)</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="dong">Đồng</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="nhom">Nhôm</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="sat">Sắt Thép</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="inox">Inox</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="giay">Giấy</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="nhua">Nhựa</button>
+            <button type="button" class="filter-tab-btn price-cat-tab" data-cat="hopkim">Hợp Kim</button>
+          </div>
+
+          <div class="toolbar-actions">
+            <div class="search-input-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="priceSearchInput" placeholder="Tìm kiếm loại phế liệu...">
+            </div>
+
+            <button type="button" class="btn-admin btn-outline" id="btnBulkIncrease" title="Tăng đồng loạt 5% giá tất cả mặt hàng">
+              <i class="fa-solid fa-arrow-trend-up" style="color: var(--primary-light);"></i> +5% Giá
+            </button>
+
+            <button type="button" class="btn-admin btn-outline" id="btnBulkDecrease" title="Giảm đồng loạt 5% giá">
+              <i class="fa-solid fa-arrow-trend-down" style="color: var(--accent-danger);"></i> -5% Giá
+            </button>
+
+            <button type="button" class="btn-admin btn-primary" id="btnSavePrices">
+              <i class="fa-solid fa-cloud-arrow-up"></i> Lưu & Áp Dụng Lên Website
+            </button>
+          </div>
+        </div>
+
+        <!-- Prices Table -->
+        <div class="table-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 120px;">Danh Mục</th>
+                <th>Tên Phế Liệu & Quy Cách</th>
+                <th style="width: 80px;">ĐVT</th>
+                <th style="width: 250px;">Đơn Giá Niêm Yết Hôm Nay</th>
+                <th style="width: 150px;">Xu Hướng</th>
+                <th>Thưởng Lô Lớn / Hoa Hồng</th>
+                <th style="width: 80px; text-align: center;">Sửa</th>
+              </tr>
+            </thead>
+            <tbody id="priceTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 3: QUẢN LÝ ĐƠN ĐẶT LỊCH & CRM (LEADS)
+           ===================================================================== -->
+      <section class="view-section" id="view-leads">
+        <!-- Toolbar -->
+        <div class="table-toolbar">
+          <div class="filter-tabs">
+            <button type="button" class="filter-tab-btn lead-filter-tab active" data-status="all">Tất cả đơn</button>
+            <button type="button" class="filter-tab-btn lead-filter-tab" data-status="pending">⏳ Chờ liên hệ</button>
+            <button type="button" class="filter-tab-btn lead-filter-tab" data-status="scheduled">📅 Đã xếp lịch</button>
+            <button type="button" class="filter-tab-btn lead-filter-tab" data-status="completed">✅ Đã cân & Thanh toán</button>
+            <button type="button" class="filter-tab-btn lead-filter-tab" data-status="cancelled">❌ Đã hủy</button>
+          </div>
+
+          <div class="toolbar-actions">
+            <div class="search-input-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input type="text" id="leadSearchInput" placeholder="Tìm theo tên, SĐT, KCN...">
+            </div>
+
+            <button type="button" class="btn-admin btn-gold" id="btnExportLeads">
+              <i class="fa-solid fa-file-excel"></i> Xuất File CSV
+            </button>
+          </div>
+        </div>
+
+        <!-- Leads Table -->
+        <div class="table-card">
+          <table class="admin-table">
+            <thead>
+              <tr>
+                <th style="width: 90px;">Mã Đơn</th>
+                <th>Khách Hàng / Đại Diện</th>
+                <th style="width: 150px;">Số Điện Thoại</th>
+                <th>Địa Điểm Khảo Sát</th>
+                <th>Phế Liệu & Khối Lượng</th>
+                <th style="width: 170px;">Trạng Thái Xử Lý</th>
+                <th style="width: 120px; text-align: center;">Thao Tác</th>
+              </tr>
+            </thead>
+            <tbody id="leadsTableBody">
+              <!-- Dynamically populated -->
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 4: CHÍNH SÁCH HOA HỒNG (COMMISSION)
+           ===================================================================== -->
+      <section class="view-section" id="view-commission">
+        <div style="margin-bottom: 24px;">
+          <h2 style="font-family: var(--font-heading); font-size: 1.25rem; font-weight: 700; color: #fff; margin-bottom: 6px;">
+            <i class="fa-solid fa-hand-holding-dollar" style="color: var(--accent-gold);"></i> Bảng Định Mức Chi Trả Hoa Hồng Người Giới Thiệu
+          </h2>
+          <p style="font-size: 0.88rem; color: var(--text-muted);">
+            Cam kết chi trả dứt điểm tiền mặt hoặc chuyển khoản kín đáo ngay sau khi xe tải rời trạm cân điện tử TVN.
+          </p>
+        </div>
+
+        <!-- 5 Tiers Grid -->
+        <div class="tiers-grid" id="commissionTiersList">
+          <!-- Dynamically populated -->
+        </div>
+
+        <!-- Commission Simulator Widget -->
+        <div class="dashboard-card" style="margin-top: 24px;">
+          <div class="card-title-bar">
+            <h3><i class="fa-solid fa-calculator" style="color: var(--accent-gold);"></i> Công Cụ Tính Nhanh Mức Hoa Hồng Cho Khách</h3>
+            <span style="font-size: 0.8rem; color: var(--text-muted);">Dự toán tự động theo khối lượng</span>
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center;">
+            <div>
+              <div class="form-group">
+                <label for="adminCalcWeight">Nhập khối lượng phế liệu ước tính (Kilogram):</label>
+                <div style="display: flex; gap: 10px;">
+                  <input type="number" id="adminCalcWeight" class="form-control-admin" placeholder="VD: 5000" value="5000" style="font-size: 1.1rem; font-weight: 700; color: #fff;">
+                  <span style="display: flex; align-items: center; padding: 0 16px; background: #080d16; border: 1px solid var(--admin-border); border-radius: var(--radius-md); font-weight: 700;">kg</span>
+                </div>
+              </div>
+            </div>
+            <div style="background: #080d16; border: 1px solid var(--admin-border); border-radius: var(--radius-md); padding: 18px 24px; text-align: center;">
+              <span style="font-size: 0.8rem; color: var(--text-muted); text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px;">Mức Hoa Hồng Thưởng Dự Kiến:</span>
+              <div id="adminCalcResult" style="margin-top: 6px;">
+                <div style="font-size: 1.5rem; font-weight: 800; color: #fbbf24; font-family: var(--font-heading);">10.000.000 đ</div>
+                <div style="font-size: 0.8rem; color: var(--text-muted); margin-top: 4px;">Mức 3: Từ 5 tấn - 20 tấn</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- =====================================================================
+           VIEW 5: CẤU HÌNH DOANH NGHIỆP & HỆ THỐNG (SETTINGS)
+           ===================================================================== -->
+      <section class="view-section" id="view-settings">
+        <form id="settingsForm">
+          <div class="settings-grid">
+            <!-- Left: Business Info -->
+            <div class="settings-card">
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: #fff; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-building" style="color: var(--primary-light);"></i> Thông Tin Pháp Lý Doanh Nghiệp
+              </h3>
+
+              <div class="form-group">
+                <label for="setCompanyName">Tên Đầy Đủ Doanh Nghiệp:</label>
+                <input type="text" id="setCompanyName" class="form-control-admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setShortName">Tên Thương Hiệu (Viết tắt):</label>
+                <input type="text" id="setShortName" class="form-control-admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setHotline1">Hotline Chính (Tổng đài 24/7):</label>
+                <input type="text" id="setHotline1" class="form-control-admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setHotline2">Hotline Phụ (Tư vấn xe cẩu & Bốc dỡ):</label>
+                <input type="text" id="setHotline2" class="form-control-admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setEmail">Email Tiếp Nhận Hồ Sơ / Báo Giá:</label>
+                <input type="email" id="setEmail" class="form-control-admin" required>
+              </div>
+
+              <div class="form-group">
+                <label for="setAddress">Địa Chỉ Trụ Sở Chính & Kho Bãi Ninh Bình:</label>
+                <textarea id="setAddress" class="form-control-admin" rows="2" required></textarea>
+              </div>
+            </div>
+
+            <!-- Right: Web Announcements & Banner -->
+            <div class="settings-card">
+              <h3 style="font-family: var(--font-heading); font-size: 1.1rem; color: #fff; margin-bottom: 18px; display: flex; align-items: center; gap: 8px;">
+                <i class="fa-solid fa-bullhorn" style="color: var(--accent-gold);"></i> Thông Báo Trực Tuyến & Ưu Đãi
+              </h3>
+
+              <div class="toggle-wrapper">
+                <div>
+                  <strong style="color: #fff; font-size: 0.9rem;">Bật Thanh Thông Báo Đầu Trang</strong>
+                  <div style="font-size: 0.78rem; color: var(--text-muted); margin-top: 2px;">Hiển thị banner khẩn cấp / ưu đãi giá trên website khách</div>
+                </div>
+                <label class="toggle-switch">
+                  <input type="checkbox" id="setAnnouncementActive">
+                  <span class="toggle-slider"></span>
+                </label>
+              </div>
+
+              <div class="form-group">
+                <label for="setAnnouncement">Nội Dung Thông Báo Ưu Đãi:</label>
+                <textarea id="setAnnouncement" class="form-control-admin" rows="4" placeholder="Nhập thông báo ưu đãi..."></textarea>
+              </div>
+
+              <div style="margin-top: 28px; padding-top: 20px; border-top: 1px solid var(--admin-border);">
+                <button type="submit" class="btn-admin btn-primary" style="width: 100%; justify-content: center; padding: 12px;">
+                  <i class="fa-solid fa-floppy-disk"></i> Lưu Thay Đổi Cấu Hình
+                </button>
+              </div>
+            </div>
+          </div>
+        </form>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- =========================================================================
+       3. MODAL: CHI TIẾT ĐƠN KHẢO SÁT (LEAD DETAIL)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="leadDetailModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-file-invoice" style="color: var(--primary-light);"></i> Chi Tiết Đơn Khảo Sát <span id="modalLeadId" style="color: var(--accent-gold);"></span></h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <div class="modal-body">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Khách hàng:</span>
+            <div id="modalLeadName" style="font-weight: 700; color: #fff; font-size: 1rem; margin-top: 2px;"></div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Số điện thoại:</span>
+            <div style="margin-top: 2px;">
+              <a id="modalLeadPhoneLink" href="#" style="color: var(--primary-light); font-weight: 800; text-decoration: none; font-size: 1.05rem;">
+                <i class="fa-solid fa-phone"></i> <span id="modalLeadPhone"></span>
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Địa điểm khảo sát:</span>
+          <div id="modalLeadLocation" style="color: #fff; font-size: 0.9rem; margin-top: 2px;"></div>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 16px;">
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Mặt hàng phế liệu:</span>
+            <div id="modalLeadScrap" style="color: #fbbf24; font-weight: 700; margin-top: 2px;"></div>
+          </div>
+          <div>
+            <span style="font-size: 0.75rem; color: var(--text-muted);">Khối lượng ước tính:</span>
+            <div id="modalLeadWeight" style="color: #fff; font-weight: 600; margin-top: 2px;"></div>
+          </div>
+        </div>
+
+        <div style="margin-bottom: 14px;">
+          <span style="font-size: 0.75rem; color: var(--text-muted);">Thời gian gửi yêu cầu:</span>
+          <div id="modalLeadTime" style="color: var(--text-secondary); font-size: 0.85rem; margin-top: 2px;"></div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid var(--admin-border); margin: 16px 0;">
+
+        <div class="form-group">
+          <label for="modalLeadStatus">Trạng Thái Xử Lý:</label>
+          <select id="modalLeadStatus" class="form-control-admin">
+            <option value="pending">⏳ Chờ liên hệ (Mới)</option>
+            <option value="scheduled">📅 Đã xếp lịch khảo sát & Xe cẩu</option>
+            <option value="completed">✅ Đã cân & Thanh toán dứt điểm</option>
+            <option value="cancelled">❌ Đã hủy</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="modalLeadAssigned">Đội Xe / Nhân Sự Phụ Trách:</label>
+          <input type="text" id="modalLeadAssigned" class="form-control-admin" placeholder="VD: Đội xe cẩu số 1 - Anh Hùng">
+        </div>
+
+        <div class="form-group">
+          <label for="modalLeadNote">Ghi Chú Nội Bộ Của TVN:</label>
+          <textarea id="modalLeadNote" class="form-control-admin" rows="3" placeholder="Ghi chú thêm về giá thỏa thuận, giờ hẹn khảo sát..."></textarea>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn-admin btn-outline btn-modal-cancel">Đóng</button>
+        <button type="button" class="btn-admin btn-primary" id="btnSaveLeadDetail">
+          <i class="fa-solid fa-check"></i> Lưu Cập Nhật Đơn
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       4. MODAL: CHỈNH SỬA PHẾ LIỆU (EDIT PRICE)
+       ========================================================================= -->
+  <div class="modal-backdrop" id="editPriceModal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3><i class="fa-solid fa-pen-to-square" style="color: var(--primary-light);"></i> Chỉnh Sửa Chi Tiết Bảng Giá</h3>
+        <button type="button" class="modal-close-btn">&times;</button>
+      </div>
+      <form id="editPriceForm">
+        <div class="modal-body">
+          <div class="form-group">
+            <label for="editPriceName">Tên Mặt Hàng:</label>
+            <input type="text" id="editPriceName" class="form-control-admin" required>
+          </div>
+
+          <div class="form-group">
+            <label for="editPriceSpec">Quy Cách & Tiêu Chuẩn Phân Loại:</label>
+            <textarea id="editPriceSpec" class="form-control-admin" rows="2" required></textarea>
+          </div>
+
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+            <div class="form-group">
+              <label for="editPriceUnit">Đơn Vị Tính (ĐVT):</label>
+              <input type="text" id="editPriceUnit" class="form-control-admin" placeholder="kg / tấn" required>
+            </div>
+            <div class="form-group">
+              <label for="editPriceTrend">Xu Hướng Giá:</label>
+              <select id="editPriceTrend" class="form-control-admin">
+                <option value="up">Tăng ↗</option>
+                <option value="stable">Ổn định ➔</option>
+                <option value="down">Giảm ↘</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="editPriceDisplay">Khoảng Giá Hiển Thị (VNĐ/ĐVT):</label>
+            <input type="text" id="editPriceDisplay" class="form-control-admin" placeholder="VD: 290.000 - 330.000" required>
+          </div>
+
+          <div class="form-group">
+            <label for="editPriceBonus">Chính Sách Thưởng Lô Lớn:</label>
+            <input type="text" id="editPriceBonus" class="form-control-admin" placeholder="VD: +2.000 đ/kg (>500kg)">
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn-admin btn-outline btn-modal-cancel">Hủy Bỏ</button>
+          <button type="submit" class="btn-admin btn-primary">
+            <i class="fa-solid fa-check"></i> Xác Nhận Cập Nhật
+          </button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       5. LOGIN OVERLAY (SECURITY GUARD)
+       ========================================================================= -->
+  <div class="login-overlay" id="loginOverlay">
+    <div class="login-card">
+      <div class="login-brand-icon">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h2>Hệ Thống Quản Trị TVN</h2>
+      <p>Cổng quản lý nội bộ Công ty TNHH Trung Vạn Niên</p>
+
+      <form class="login-form" id="loginForm">
+        <div class="form-group">
+          <label for="loginUsername"><i class="fa-solid fa-user"></i> Tên Đăng Nhập:</label>
+          <input type="text" id="loginUsername" class="form-control-admin" value="admin" required placeholder="Nhập tài khoản quản trị">
+        </div>
+
+        <div class="form-group" style="margin-bottom: 24px;">
+          <label for="loginPassword"><i class="fa-solid fa-key"></i> Mật Khẩu Quản Trị:</label>
+          <input type="password" id="loginPassword" class="form-control-admin" value="tvn2026@" required placeholder="Nhập mật khẩu">
+        </div>
+
+        <button type="submit" class="btn-admin btn-primary" style="width: 100%; justify-content: center; padding: 12px; font-size: 1rem;">
+          <i class="fa-solid fa-right-to-bracket"></i> Đăng Nhập Quản Trị
+        </button>
+
+        <div class="login-hint">
+          <i class="fa-solid fa-circle-info"></i> <strong>Tài khoản mẫu mặc định:</strong><br>
+          • Tên đăng nhập: <code>admin</code><br>
+          • Mật khẩu: <code>tvn2026@</code>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- =========================================================================
+       6. TOAST CONTAINER
+       ========================================================================= -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Admin Controller Script -->
+  <script src="js/admin.js"></script>
+</body>
+</html>
